@@ -1,0 +1,119 @@
+
+@{
+    ViewData["Title"] = "Digital Identity Verification";
+}
+
+<div class="container mt-5">
+
+    <!-- PAGE HEADING -->
+    <div class="text-center mb-4">
+        <h2>Blockchain-Based Digital Identity</h2>
+        <p>Verify the authenticity of a registered tourist identity.</p>
+    </div>
+
+    <div class="card shadow p-4 mx-auto" style="max-width: 650px;">
+
+        <h4 class="mb-3">Verify Tourist ID</h4>
+
+        <!-- TOURIST ID VERIFICATION FORM -->
+        <form asp-controller="Home"
+              asp-action="VerifyIdentity"
+              method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Tourist ID</label>
+
+                <input type="text"
+                       name="touristId"
+                       class="form-control"
+                       placeholder="Enter Tourist ID"
+                       required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Verify Identity
+            </button>
+
+        </form>
+
+        <!-- VERIFICATION MESSAGE -->
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-info mt-4">
+                @ViewBag.Message
+            </div>
+        }
+
+        <!-- DIGITAL IDENTITY DETAILS -->
+        @if (ViewBag.Tourist != null && ViewBag.Identity != null)
+        {
+            <hr />
+
+            <h4 class="text-success mb-3">
+                Digital Identity Details
+            </h4>
+
+            <!-- TOURIST NAME -->
+            <p>
+                <strong>Name:</strong>
+                @ViewBag.Tourist.Name
+            </p>
+
+            <!-- TOURIST ID -->
+            <p>
+                <strong>Tourist ID:</strong>
+                @ViewBag.Tourist.TouristId
+            </p>
+
+            <!-- EMAIL -->
+            <p>
+                <strong>Email:</strong>
+                @ViewBag.Tourist.Email
+            </p>
+
+            <!-- DESTINATION -->
+            <p>
+                <strong>Destination:</strong>
+                @ViewBag.Tourist.Destination
+            </p>
+
+            <!-- IDENTITY VERIFICATION STATUS -->
+            <p>
+                <strong>Identity Status:</strong>
+
+                @if (ViewBag.VerificationStatus == "Verified")
+                {
+                    <span class="badge bg-success">
+                        @ViewBag.VerificationStatus
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">
+                        @ViewBag.VerificationStatus
+                    </span>
+                }
+            </p>
+
+            <!-- BLOCKCHAIN CHAIN STATUS -->
+            <p>
+                <strong>Blockchain Chain Status:</strong>
+
+                @if (ViewBag.ChainStatus == "Blockchain Chain Verified")
+                {
+                    <span class="badge bg-success">
+                        @ViewBag.ChainStatus
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">
+                        @ViewBag.ChainStatus
+                    </span>
+                }
+            </p>
+
+        }
+
+    </div>
+</div>

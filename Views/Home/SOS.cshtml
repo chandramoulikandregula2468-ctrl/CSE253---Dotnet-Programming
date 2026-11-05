@@ -1,0 +1,71 @@
+
+@{
+    ViewData["Title"] = "Emergency SOS";
+}
+
+<div class="container py-5">
+
+    <h2 class="text-center text-danger mb-4">
+        Emergency SOS
+    </h2>
+
+    <p class="text-center">
+        Submit an incident report to the Tourist Safety System.
+    </p>
+
+    <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+
+        <form asp-controller="Home" asp-action="SOS" method="post">
+
+            <!-- Tourist ID -->
+            <div class="mb-3">
+                <label class="form-label">Tourist ID</label>
+
+                <input type="text"
+                       name="TouristId"
+                       class="form-control"
+                       value="@Model?.TouristId"
+                       placeholder="Enter your registered Tourist ID"
+                       required />
+
+                <span class="text-danger">
+                    @Html.ValidationMessage("TouristId")
+                </span>
+            </div>
+
+            <!-- Emergency Type -->
+            <div class="mb-3">
+                <label class="form-label">Emergency Type</label>
+
+                <select name="EmergencyType"
+                        class="form-select"
+                        required>
+                    <option value="">Select Emergency</option>
+                    <option>Medical Emergency</option>
+                    <option>Lost Tourist</option>
+                    <option>Accident</option>
+                    <option>Other Safety Concern</option>
+                </select>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+
+                <textarea name="Description"
+                          class="form-control"
+                          rows="4"
+                          placeholder="Describe the incident"
+                          required>@Model?.Description</textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-danger w-100">
+                Submit SOS Report
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

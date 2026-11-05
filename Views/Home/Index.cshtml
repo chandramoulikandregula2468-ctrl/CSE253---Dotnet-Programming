@@ -1,0 +1,576 @@
+﻿@{
+    ViewData["Title"] = "Smart Tourist Safety";
+}
+
+<style>
+    body {
+        background: #f4f7fc;
+    }
+
+    .home-wrapper {
+        max-width: 1250px;
+        margin: auto;
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+        background: linear-gradient(125deg, #071b36, #103e70, #087ca5);
+        color: #ffffff;
+        padding: 65px 45px;
+        border-radius: 25px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(10, 45, 85, 0.2);
+    }
+
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        border: 1px solid rgba(255,255,255,0.13);
+        border-radius: 50%;
+        right: -80px;
+        top: -130px;
+        box-shadow: 0 0 0 35px rgba(255,255,255,0.035),
+                    0 0 0 75px rgba(255,255,255,0.025);
+    }
+
+    .hero-section .row {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* IMPORTANT: HERO TEXT COLOUR FIX */
+    .hero-section h1,
+    .hero-section h2,
+    .hero-section h3,
+    .hero-section h4,
+    .hero-section h5,
+    .hero-section small {
+        color: #ffffff !important;
+    }
+
+    .hero-section h1 {
+        font-size: 46px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .hero-section h4 {
+        font-weight: 700;
+    }
+
+    .hero-section p {
+        color: #e3efff !important;
+        font-size: 17px;
+        max-width: 650px;
+        line-height: 1.7;
+    }
+
+    .hero-icon {
+        font-size: 115px;
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    @@keyframes floatIcon {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-12px);
+        }
+    }
+
+    .live-badge {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.16);
+        color: #a7f3d0 !important;
+        border: 1px solid rgba(167,243,208,0.35);
+        padding: 9px 15px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .hero-section .btn-light {
+        color: #102d50 !important;
+        border-radius: 10px;
+    }
+
+    .hero-section .btn-outline-light {
+        color: #ffffff !important;
+        border-radius: 10px;
+    }
+
+    /* SECTION HEADINGS */
+    .section-heading {
+        font-weight: 800;
+        color: #142c4d;
+    }
+
+    .section-subtitle {
+        color: #718096;
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid #e8eef7;
+    }
+
+    /* SERVICE CARDS */
+    .service-card {
+        background: white;
+        border: 1px solid #e8eef7;
+        border-radius: 20px;
+        padding: 28px 23px;
+        height: 100%;
+        box-shadow: 0 5px 18px rgba(20,45,80,0.045);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .service-card:hover {
+        transform: translateY(-9px);
+        box-shadow: 0 15px 30px rgba(20,45,80,0.12);
+        border-color: #b8d8f8;
+    }
+
+    .service-icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 37px;
+        margin: 0 auto 20px;
+    }
+
+    .icon-blue {
+        background: #e8f1ff;
+    }
+
+    .icon-green {
+        background: #e5f9ef;
+    }
+
+    .icon-red {
+        background: #fff0f0;
+    }
+
+    .icon-cyan {
+        background: #e5f8fc;
+    }
+
+    .icon-orange {
+        background: #fff4e5;
+    }
+
+    .icon-purple {
+        background: #f2ebff;
+    }
+
+    .service-card h4 {
+        font-size: 20px;
+        font-weight: 750;
+        color: #183452;
+    }
+
+    .service-card p {
+        color: #718096;
+        min-height: 65px;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .service-card .btn {
+        border-radius: 10px;
+        padding: 11px;
+        font-weight: 650;
+    }
+
+    /* FEATURE STRIP */
+    .feature-strip {
+        background: linear-gradient(120deg, #e7f1ff, #f4f8ff);
+        border: 1px solid #dceaff;
+        border-radius: 20px;
+        padding: 28px;
+    }
+
+    .feature-item {
+        font-weight: 700;
+        color: #25466c;
+        margin: 8px 0;
+    }
+
+    /* BOTTOM BANNER */
+    .bottom-banner {
+        background: linear-gradient(120deg, #102d50, #1769aa);
+        color: white;
+        padding: 38px 25px;
+        border-radius: 22px;
+    }
+
+    .bottom-banner h2 {
+        color: #ffffff;
+    }
+
+    .bottom-banner p {
+        color: #dcecff;
+    }
+
+    .bottom-banner .btn {
+        color: #102d50;
+        border-radius: 10px;
+    }
+
+    /* MOBILE RESPONSIVE */
+    @@media (max-width: 768px) {
+
+        .hero-section {
+            padding: 40px 22px;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 32px;
+        }
+
+        .hero-icon {
+            font-size: 75px;
+            margin-top: 25px;
+        }
+
+        .hero-section .btn {
+            margin: 5px !important;
+        }
+
+        .service-card {
+            padding: 24px 18px;
+        }
+    }
+</style>
+
+
+<div class="container py-4 home-wrapper">
+
+    <!-- HERO SECTION -->
+    <div class="hero-section mb-5">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-8 position-relative">
+
+                <span class="live-badge mb-4">
+                    ● AI POWERED TOURIST SAFETY
+                </span>
+
+                <h1 class="mt-3">
+                    Smart Tourist<br />
+                    Safety System
+                </h1>
+
+                <h4 class="mt-3">
+                    Your Safety, Our Priority.
+                </h4>
+
+                <p class="mt-3 mb-4">
+                    A smart tourism safety platform integrating
+                    location tracking, geo-fencing, emergency
+                    response and blockchain-style digital identity.
+                    Explore with confidence.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Register"
+                   class="btn btn-light btn-lg fw-bold px-4">
+                    Get Started →
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="Dashboard"
+                   class="btn btn-outline-light btn-lg ms-2">
+                    View Dashboard
+                </a>
+
+            </div>
+
+            <div class="col-md-4 text-center position-relative">
+
+                <div class="hero-icon">🛡️</div>
+
+                <h5 class="fw-bold mt-2">
+                    Travel Safe. Travel Smart.
+                </h5>
+
+                <small>
+                    Intelligent Tourist Protection
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ABOUT SECTION -->
+    <div class="about-section text-center mb-5">
+
+        <div class="fs-1 mb-2">🌍</div>
+
+        <h2 class="section-heading">
+            Welcome to Smart Tourist Safety
+        </h2>
+
+        <p class="section-subtitle mt-3 mb-0">
+            Our platform helps monitor tourist safety, manage emergency
+            incidents, record GPS locations and detect safety-zone
+            violations using modern technology.
+        </p>
+
+    </div>
+
+
+    <!-- SERVICES SECTION -->
+    <div class="text-center mb-4">
+
+        <h2 class="section-heading">
+            Explore Our Services
+        </h2>
+
+        <p class="section-subtitle">
+            Everything you need for a smarter and safer travel experience.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- TOURIST REGISTRATION -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-blue">📝</div>
+
+                <h4>Tourist Registration</h4>
+
+                <p>
+                    Register tourist information and generate
+                    a unique digital Tourist ID.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Register"
+                   class="btn btn-primary w-100">
+                    Register Now →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SAFETY DASHBOARD -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-green">📊</div>
+
+                <h4>Safety Dashboard</h4>
+
+                <p>
+                    Monitor registered tourists, emergency
+                    reports, safety alerts and location records.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Dashboard"
+                   class="btn btn-success w-100">
+                    View Dashboard →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMERGENCY SOS -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-red">🚨</div>
+
+                <h4>Emergency SOS</h4>
+
+                <p>
+                    Submit emergency reports and notify
+                    the safety monitoring system.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="SOS"
+                   class="btn btn-danger w-100">
+                    Report Emergency →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCATION TRACKING -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-cyan">📍</div>
+
+                <h4>Location Tracking</h4>
+
+                <p>
+                    Capture and save tourist GPS coordinates
+                    with browser location permission.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="TrackLocation"
+                   class="btn btn-info text-white w-100">
+                    Track Location →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- GEO-FENCING -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-orange">🗺️</div>
+
+                <h4>Geo-Fencing</h4>
+
+                <p>
+                    Create virtual safety zones and check
+                    whether tourists are inside or outside.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="GeoFence"
+                   class="btn btn-warning w-100">
+                    Manage Safety Zones →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- DIGITAL IDENTITY -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="service-card text-center">
+
+                <div class="service-icon icon-purple">🔐</div>
+
+                <h4>Digital Identity</h4>
+
+                <p>
+                    Verify tourist digital records using
+                    SHA-256 hash-based identity verification.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="VerifyIdentity"
+                   class="btn text-white w-100"
+                   style="background:#7045b5;">
+                    Verify Identity →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEATURE STRIP -->
+    <div class="feature-strip mt-5">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+                <div class="feature-item">
+                    🛡️ Smart Protection
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="feature-item">
+                    📍 GPS Monitoring
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="feature-item">
+                    🚨 SOS Alerts
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="feature-item">
+                    🔐 Identity Security
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM BANNER -->
+    <div class="bottom-banner text-center mt-5">
+
+        <h2 class="fw-bold">
+            Your Journey, Our Responsibility
+        </h2>
+
+        <p class="mt-2 mb-4">
+            Smart Technology for Safer Tourism.
+        </p>
+
+        <a asp-controller="Home"
+           asp-action="Register"
+           class="btn btn-light fw-bold px-4">
+            Start Your Journey →
+        </a>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="text-center mt-4 mb-2">
+
+        <p class="text-secondary small">
+            © 2026 Smart Tourist Safety Monitoring System
+        </p>
+
+    </div>
+
+</div>

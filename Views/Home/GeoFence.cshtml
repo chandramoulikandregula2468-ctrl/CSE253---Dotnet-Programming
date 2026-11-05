@@ -1,0 +1,156 @@
+
+@model TouristSafetySystem.Models.Geofence
+
+@using TouristSafetySystem.Models
+
+@{
+    ViewData["Title"] = "Geo-Fencing";
+    var zones = ViewBag.Geofences as List<Geofence>
+                ?? new List<Geofence>();
+}
+
+<div class="container mt-5">
+
+    <h2>Geo-Fencing Safety Zone</h2>
+
+    <p>Create a virtual safety boundary for a tourist destination.</p>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (ViewBag.CheckResult != null)
+    {
+        <div class="alert alert-info">
+            <strong>@ViewBag.CheckResult</strong>
+        </div>
+    }
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <hr />
+
+    <h4>Create Safety Zone</h4>
+
+    <form asp-action="GeoFence" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Zone Name</label>
+            <input asp-for="ZoneName"
+                   class="form-control"
+                   placeholder="Enter zone name"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Center Latitude</label>
+            <input asp-for="CenterLatitude"
+                   type="number"
+                   step="any"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Center Longitude</label>
+            <input asp-for="CenterLongitude"
+                   type="number"
+                   step="any"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Radius (Kilometers)</label>
+            <input asp-for="RadiusInKm"
+                   type="number"
+                   step="any"
+                   min="0.1"
+                   class="form-control"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Save Safety Zone
+        </button>
+
+    </form>
+
+    <hr />
+
+    <h4>Check Tourist Safety Zone</h4>
+
+    <form asp-action="CheckGeoFence" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Tourist ID</label>
+            <input type="text"
+                   name="touristId"
+                   class="form-control"
+                   placeholder="Enter registered Tourist ID"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Safety Zone</label>
+
+            <select name="geofenceId" class="form-control" required>
+                <option value="">-- Select Safety Zone --</option>
+
+                @foreach (var zone in zones)
+                {
+                    <option value="@zone.Id">
+                        @zone.ZoneName
+                    </option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Check Safety Zone
+        </button>
+
+    </form>
+
+    <hr />
+
+    <h4>Saved Safety Zones</h4>
+
+    @if (zones.Count > 0)
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Zone Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Radius (km)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var zone in zones)
+                {
+                    <tr>
+                        <td>@zone.ZoneName</td>
+                        <td>@zone.CenterLatitude</td>
+                        <td>@zone.CenterLongitude</td>
+                        <td>@zone.RadiusInKm</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No safety zones created yet.</p>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Back to Home
+    </a>
+
+</div>

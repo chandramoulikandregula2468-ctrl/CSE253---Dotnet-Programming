@@ -1,0 +1,32 @@
+@model TouristSafetySystem.Models.Tourist
+
+@{
+    ViewData["Title"] = "Registration Successful";
+}
+
+<div class="container mt-5 text-center">
+
+    <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+
+        <h2 class="text-success">Registration Successful!</h2>
+
+        <p class="mt-3">Welcome, @Model.Name!</p>
+
+        <h4>Your Tourist ID</h4>
+
+        <h3 class="text-primary">@Model.TouristId</h3>
+
+        <p><strong>Age:</strong> @Model.Age</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+        <p><strong>Destination:</strong> @Model.Destination</p>
+        <p><strong>Travel Date:</strong> @Model.TravelDate.ToShortDateString()</p>
+
+        <a asp-controller="Home" asp-action="Index"
+           class="btn btn-primary mt-3">
+            Back to Home
+        </a>
+
+    </div>
+
+</div>

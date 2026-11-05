@@ -1,0 +1,261 @@
+
+@model TouristSafetySystem.Models.TouristLocation
+
+@{
+    ViewData["Title"] = "Track Tourist Location";
+}
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-3">Tourist Location Tracking</h2>
+
+        <p class="text-center text-muted">
+            Enter your registered Tourist ID and allow location access.
+        </p>
+
+        <form asp-controller="Home"
+              asp-action="TrackLocation"
+              method="post"
+              id="locationForm">
+
+            <div class="mb-3">
+                <label asp-for="TouristId" class="form-label">
+                    Tourist ID
+                </label>
+
+                <input asp-for="TouristId"
+                       class="form-control"
+                       id="TouristId"
+                       placeholder="Enter your Tourist ID"
+                       required />
+
+                <span asp-validation-for="TouristId"
+                      class="text-danger"></span>
+            </div>
+
+            <input asp-for="Latitude" type="hidden" id="Latitude" />
+            <input asp-for="Longitude" type="hidden" id="Longitude" />
+
+            <div class="text-center mb-3">
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="getLocation()">
+                    Get My Location
+                </button>
+            </div>
+
+            <p id="locationResult"
+               class="text-center text-success"></p>
+
+            <div class="text-center mb-3">
+                <button type="submit" class="btn btn-success">
+                    Save Location
+                </button>
+            </div>
+
+            <hr />
+
+            <h4 class="text-center text-primary">
+                Live Location Tracking
+            </h4>
+
+            <p class="text-center text-muted">
+                Start tracking only when you want to share your location.
+            </p>
+
+            <div class="text-center">
+                <button type="button"
+                        id="startButton"
+                        class="btn btn-success"
+                        onclick="startTracking()">
+                    ▶ Start Live Tracking
+                </button>
+
+                <button type="button"
+                        id="stopButton"
+                        class="btn btn-danger"
+                        onclick="stopTracking()"
+                        disabled>
+                    ■ Stop Live Tracking
+                </button>
+            </div>
+
+            <p id="liveStatus"
+               class="text-center mt-3 fw-bold">
+                Tracking is stopped.
+            </p>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    let locationCaptured = false;
+    let watchId = null;
+    let trackingActive = false;
+    let savingLocation = false;
+
+    function getLocation() {
+        const result = document.getElementById("locationResult");
+
+        if (!navigator.geolocation) {
+            result.textContent =
+                "Location services are not supported by this browser.";
+            return;
+        }
+
+        result.textContent = "Requesting location permission...";
+
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                document.getElementById("Latitude").value =
+                    position.coords.latitude;
+
+                document.getElementById("Longitude").value =
+                    position.coords.longitude;
+
+                locationCaptured = true;
+
+                result.textContent =
+                    "Location captured successfully!";
+            },
+            function (error) {
+                locationCaptured = false;
+
+                result.textContent =
+                    "Unable to get location: " + error.message;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 5000
+            }
+        );
+    }
+
+    async function saveLiveLocation(position) {
+
+        if (savingLocation || !trackingActive) {
+            return;
+        }
+
+        savingLocation = true;
+
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        document.getElementById("Latitude").value = latitude;
+        document.getElementById("Longitude").value = longitude;
+
+        locationCaptured = true;
+
+        const form = document.getElementById("locationForm");
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Server could not save the location.");
+            }
+
+            const message = await response.text();
+
+            if (trackingActive) {
+                document.getElementById("liveStatus").textContent =
+                    "Tracking active. " + message +
+                    " (" + latitude.toFixed(5) +
+                    ", " + longitude.toFixed(5) + ")";
+            }
+
+        } catch (error) {
+            document.getElementById("liveStatus").textContent =
+                "Save error: " + error.message;
+        } finally {
+            savingLocation = false;
+        }
+    }
+
+    function startTracking() {
+
+        const touristId =
+            document.getElementById("TouristId").value.trim();
+
+        const status = document.getElementById("liveStatus");
+
+        if (!touristId) {
+            status.textContent = "Please enter your Tourist ID first.";
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            status.textContent =
+                "Location services are not supported by this browser.";
+            return;
+        }
+
+        if (trackingActive) {
+            return;
+        }
+
+        trackingActive = true;
+
+        document.getElementById("startButton").disabled = true;
+        document.getElementById("stopButton").disabled = false;
+
+        status.textContent = "Waiting for GPS location...";
+
+        watchId = navigator.geolocation.watchPosition(
+            function (position) {
+                saveLiveLocation(position);
+            },
+            function (error) {
+                status.textContent =
+                    "Location error: " + error.message;
+
+                stopTracking();
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 5000,
+                timeout: 15000
+            }
+        );
+    }
+
+    function stopTracking() {
+
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+        }
+
+        trackingActive = false;
+
+        document.getElementById("startButton").disabled = false;
+        document.getElementById("stopButton").disabled = true;
+
+        document.getElementById("liveStatus").textContent =
+            "Live tracking stopped.";
+    }
+
+    document.getElementById("locationForm").addEventListener(
+        "submit",
+        function (event) {
+
+            if (!locationCaptured) {
+                event.preventDefault();
+
+                document.getElementById("locationResult").textContent =
+                    "Please click Get My Location before saving.";
+            }
+        }
+    );
+
+    window.addEventListener("beforeunload", function () {
+        stopTracking();
+    });
+</script>

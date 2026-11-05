@@ -1,0 +1,449 @@
+
+/* =========================================
+   GENERAL WEBSITE STYLING
+========================================= */
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin: 0;
+    margin-bottom: 60px;
+    background-color: #f4f7fb;
+    color: #263449;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Headings */
+
+h1, h2, h3, h4 {
+    color: #17365f;
+    font-weight: 700;
+}
+
+/* =========================================
+   NAVIGATION BAR
+========================================= */
+
+.navbar {
+    background-color: #17365f !important;
+    padding: 12px 20px;
+    box-shadow: 0 3px 12px rgba(15, 35, 65, 0.18);
+}
+
+/* Website Brand */
+
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 800;
+    transition: color 0.3s ease;
+}
+
+.navbar .navbar-brand:hover {
+    color: #dbeafe !important;
+}
+
+/* Navigation Links */
+
+.navbar .navbar-nav .nav-link {
+    color: #e2eaf5 !important;
+    font-weight: 500;
+    padding: 10px 14px !important;
+    margin: 0 3px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Navigation Hover Effect */
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.13);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Active Navigation Link */
+
+.navbar .navbar-nav .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 -2px 0 #8fc5ff;
+}
+
+/* Keyboard Focus */
+
+.navbar .navbar-nav .nav-link:focus {
+    color: #ffffff !important;
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Navigation Icons */
+
+.navbar .navbar-nav .nav-link i {
+    margin-right: 5px;
+}
+
+/* Mobile Navigation Menu */
+
+@media (max-width: 991px) {
+    .navbar .navbar-nav .nav-link {
+        margin: 3px 0;
+        padding: 10px 14px !important;
+    }
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn {
+    border-radius: 7px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background-color: #174ea6;
+    border-color: #174ea6;
+}
+
+.btn-primary:hover {
+    background-color: #103b80;
+}
+
+.btn-success {
+    background-color: #16865c;
+    border-color: #16865c;
+}
+
+/* =========================================
+   INPUT FIELDS
+========================================= */
+
+.form-control,
+.form-select {
+    border-radius: 7px;
+    padding: 10px;
+    border: 1px solid #d5deea;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #258cfb;
+    box-shadow: 0 0 0 0.2rem rgba(37, 140, 251, 0.15);
+}
+
+/* =========================================
+   GENERAL CARDS
+========================================= */
+
+.card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 3px 15px rgba(20, 45, 80, 0.07);
+    margin-bottom: 22px;
+}
+
+/* =========================================
+   DASHBOARD DESIGN
+========================================= */
+
+.dashboard-page {
+    color: #1e293b;
+}
+
+/* Dashboard title */
+
+.dashboard-page > h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+/* Dashboard section headings */
+
+.dashboard-page h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin-bottom: 18px;
+}
+
+.dashboard-page h4 {
+    font-weight: 700;
+}
+
+/* =========================================
+   DASHBOARD SUMMARY CARDS
+========================================= */
+
+.dashboard-page > .row.g-4.mb-4 > div .card {
+    min-height: 155px;
+    justify-content: center;
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+    border-left: 5px solid transparent;
+    margin-bottom: 0;
+}
+
+.dashboard-page > .row.g-4.mb-4 > div .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(20, 45, 80, 0.15);
+}
+
+/* Total Tourists */
+
+.dashboard-page > .row.g-4.mb-4 > div:nth-child(1) .card {
+    background: #e8f1ff;
+    border-left-color: #2674e8;
+}
+
+/* Emergency Reports */
+
+.dashboard-page > .row.g-4.mb-4 > div:nth-child(2) .card {
+    background: #fff0f0;
+    border-left-color: #e63946;
+}
+
+/* Pending Emergencies */
+
+.dashboard-page > .row.g-4.mb-4 > div:nth-child(3) .card {
+    background: #fff6df;
+    border-left-color: #f0a500;
+}
+
+/* Geo-Fencing Alerts */
+
+.dashboard-page > .row.g-4.mb-4 > div:nth-child(4) .card {
+    background: #e6f8f0;
+    border-left-color: #16865c;
+}
+
+/* Digital Identities */
+
+.dashboard-page > .row.g-4.mb-4 > div:nth-child(5) .card {
+    background: #f2eaff;
+    border-left-color: #7045b5;
+}
+
+/* Summary card icons */
+
+.dashboard-page > .row.g-4.mb-4 .fs-2 {
+    margin-bottom: 5px;
+}
+
+/* Summary card headings */
+
+.dashboard-page > .row.g-4.mb-4 h5 {
+    font-size: 15px;
+    font-weight: 650;
+    color: #34445b;
+    margin-bottom: 5px;
+}
+
+/* Summary numbers */
+
+.dashboard-page > .row.g-4.mb-4 h2 {
+    font-size: 34px;
+    font-weight: 800;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+/* =========================================
+   DIGITAL IDENTITY MANAGEMENT
+========================================= */
+
+.dashboard-page > .card.shadow-sm {
+    background: linear-gradient(135deg, #ffffff, #f0f6ff);
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.dashboard-page > .card.shadow-sm p {
+    color: #64748b;
+}
+
+/* =========================================
+   TABLE STYLING
+========================================= */
+
+.dashboard-page .table-responsive {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 28px;
+    background: white;
+    overflow-x: auto;
+}
+
+.dashboard-page .table {
+    background-color: white;
+    margin-bottom: 0;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.dashboard-page .table thead th {
+    color: #17365f;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 14px;
+}
+
+.dashboard-page .table tbody td {
+    padding: 13px;
+    color: #39485c;
+}
+
+.dashboard-page .table tbody tr:hover {
+    background-color: #f3f7fc;
+}
+
+/* Table headers */
+
+.dashboard-page .table-primary th {
+    background-color: #eaf0f8;
+}
+
+.dashboard-page .table-danger th {
+    background-color: #fff0f0;
+}
+
+.dashboard-page .table-warning th {
+    background-color: #fff6df;
+}
+
+.dashboard-page .table-info th {
+    background-color: #e6f8fc;
+}
+
+/* =========================================
+   STATUS LABELS
+========================================= */
+
+.dashboard-page .badge {
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.dashboard-page .btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.dashboard-page .table .btn {
+    white-space: nowrap;
+}
+
+/* =========================================
+   DIVIDERS AND ALERTS
+========================================= */
+
+.dashboard-page hr {
+    margin: 32px 0;
+    border-color: #cbd5e1;
+}
+
+.dashboard-page .alert {
+    border-radius: 12px;
+}
+
+/* =========================================
+   LOCATION MAP
+========================================= */
+
+#map {
+    border-radius: 12px;
+    border: 1px solid #d5deea;
+    min-height: 300px;
+}
+
+/* =========================================
+   GENERAL LINKS
+========================================= */
+
+a {
+    color: #174ea6;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #103b80;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+    padding-top: 20px;
+}
+
+/* =========================================
+   CARD HEADERS
+========================================= */
+
+.card-header {
+    background-color: #17365f;
+    color: white;
+    font-weight: 600;
+    padding: 14px 18px;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(37, 140, 251, 0.2);
+}
+
+/* =========================================
+   RESPONSIVE DASHBOARD
+========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-page > h2 {
+        font-size: 25px;
+    }
+
+    .dashboard-page h3 {
+        font-size: 19px;
+    }
+
+    .dashboard-page .table {
+        font-size: 12px;
+    }
+
+    .dashboard-page > .row.g-4.mb-4 h2 {
+        font-size: 28px;
+    }
+
+    .dashboard-page > .card.shadow-sm {
+        padding: 18px;
+    }
+}

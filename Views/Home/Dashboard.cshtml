@@ -1,0 +1,1275 @@
+@model TouristSafetySystem.Models.DashboardViewModel
+
+<style>
+    body {
+        background: #f1f5fb;
+    }
+
+    .dashboard-page {
+        max-width: 1450px;
+        margin: auto;
+        color: #243b53;
+    }
+
+    /* DASHBOARD HEADING */
+    .dashboard-page > h2 {
+        color: #102d50 !important;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+
+    #dashboardStatus {
+        padding: 9px 16px;
+        border-radius: 25px;
+        font-size: 12px;
+    }
+
+    #lastUpdated {
+        color: #718096 !important;
+    }
+
+    /* SOUND BUTTON */
+    #enableSOSSound {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 700;
+    }
+
+    /* SUMMARY CARDS */
+    .dashboard-page .row.g-4.mb-4 > div .card {
+        border: none;
+        border-radius: 18px;
+        padding: 20px !important;
+        background: white;
+        box-shadow: 0 5px 18px rgba(20,45,80,.07);
+        transition: .3s ease;
+        border-bottom: 4px solid #2878c7;
+    }
+
+    .dashboard-page .row.g-4.mb-4 > div:nth-child(2) .card {
+        border-bottom-color: #e05252;
+    }
+
+    .dashboard-page .row.g-4.mb-4 > div:nth-child(3) .card {
+        border-bottom-color: #e5a323;
+    }
+
+    .dashboard-page .row.g-4.mb-4 > div:nth-child(4) .card {
+        border-bottom-color: #16a085;
+    }
+
+    .dashboard-page .row.g-4.mb-4 > div:nth-child(5) .card {
+        border-bottom-color: #805ad5;
+    }
+
+    .dashboard-page .row.g-4.mb-4 > div .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(20,45,80,.13);
+    }
+
+    .dashboard-page .row.g-4.mb-4 .card h5 {
+        color: #52657c;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .dashboard-page .row.g-4.mb-4 .card h2 {
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    /* IDENTITY MANAGEMENT */
+    .dashboard-page > .card.shadow-sm {
+        border: none;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 5px 20px rgba(20,45,80,.07) !important;
+    }
+
+    .dashboard-page > .card h4 {
+        font-weight: 800;
+        color: #174a7e !important;
+    }
+
+    .dashboard-page > .card .btn {
+        border-radius: 9px;
+        padding: 10px 17px;
+        font-weight: 650;
+    }
+
+    /* SECTION HEADINGS */
+    .dashboard-page > h3 {
+        color: #173b62 !important;
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 18px;
+        padding-left: 12px;
+        border-left: 5px solid #2783c7;
+    }
+
+    .dashboard-page > h3.text-danger {
+        color: #c03945 !important;
+        border-left-color: #dc3545;
+    }
+
+    /* TABLE DESIGN */
+    .dashboard-page .table-responsive {
+        background: white;
+        padding: 12px;
+        border-radius: 15px;
+        box-shadow: 0 5px 18px rgba(20,45,80,.06);
+        margin-bottom: 25px;
+    }
+
+    .dashboard-page table {
+        margin-bottom: 0;
+        vertical-align: middle;
+        font-size: 13px;
+    }
+
+    .dashboard-page table thead th {
+        padding: 15px 12px;
+        white-space: nowrap;
+        font-weight: 750;
+        border: none;
+    }
+
+    .dashboard-page table tbody td {
+        padding: 13px 12px;
+        color: #40536b;
+        border-color: #edf1f7;
+    }
+
+    .dashboard-page table tbody tr {
+        transition: background .2s ease;
+    }
+
+    .dashboard-page table tbody tr:hover {
+        background: #f1f7ff;
+    }
+
+    .dashboard-page table .btn {
+        border-radius: 7px;
+        font-weight: 650;
+    }
+
+    .dashboard-page .badge {
+        padding: 7px 10px;
+        border-radius: 20px;
+    }
+
+    /* MAP */
+    .dashboard-page .card.p-3 {
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(20,45,80,.07);
+        overflow: hidden;
+    }
+
+    .dashboard-page hr {
+        border-color: #dce5f0;
+        opacity: 1;
+        margin: 32px 0;
+    }
+
+    /* NOTIFICATION POPUPS */
+    #sosNotification,
+    #geoNotification {
+        border-radius: 15px;
+        box-shadow: 0 12px 35px rgba(0,0,0,.2) !important;
+        padding: 20px;
+    }
+
+    #sosNotification {
+        border-left: 6px solid #dc3545;
+    }
+
+    #geoNotification {
+        border-left: 6px solid #e0a800;
+    }
+
+    /* MOBILE RESPONSIVE */
+    @@media (max-width: 768px) {
+        .dashboard-page > h2 {
+            font-size: 24px;
+        }
+
+        .dashboard-page > h3 {
+            font-size: 19px;
+        }
+
+        .dashboard-page .table-responsive {
+            padding: 7px;
+        }
+
+        #sosNotification,
+        #geoNotification {
+            width: 300px !important;
+            left: 10px !important;
+            right: 10px !important;
+            top: 10px !important;
+        }
+    }
+</style>
+
+
+<div class="container py-4 dashboard-page">
+
+    <!-- DASHBOARD TITLE -->
+    <h2 class="text-center mb-3">
+        🛡 Tourist Safety Dashboard
+    </h2>
+
+    <div class="text-center mb-4">
+        <span class="badge bg-success" id="dashboardStatus">
+            ● Auto Updates Enabled
+        </span>
+
+        <small class="text-muted ms-2" id="lastUpdated">
+            Waiting for first update...
+        </small>
+    </div>
+
+    <!-- SOUND BUTTON -->
+    <div class="text-center mb-3">
+        <button type="button" id="enableSOSSound"
+                class="btn btn-outline-danger">
+            🔊 Enable Alert Sounds
+        </button>
+
+        <small id="soundStatus" class="text-muted ms-2">
+            Sound is disabled
+        </small>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["IdentityMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["IdentityMessage"]
+
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- SOS NOTIFICATION POPUP -->
+    <div id="sosNotification"
+         class="alert alert-danger shadow-lg"
+         style="display:none; position:fixed; top:20px; right:20px;
+                z-index:9999; width:350px; max-width:90%;
+                border-left:6px solid #b02a37;">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">🚨 New SOS Emergency!</h5>
+
+            <button type="button" class="btn-close"
+                    onclick="closeSOSNotification()"></button>
+        </div>
+
+        <hr />
+
+        <p class="mb-1">
+            <strong>Tourist ID:</strong>
+            <span id="sosTouristId"></span>
+        </p>
+
+        <p class="mb-1">
+            <strong>Emergency Type:</strong>
+            <span id="sosEmergencyType"></span>
+        </p>
+
+        <p class="mb-1">
+            <strong>Description:</strong>
+            <span id="sosDescription"></span>
+        </p>
+
+        <p class="mb-0">
+            <strong>Reported At:</strong>
+            <span id="sosReportedAt"></span>
+        </p>
+    </div>
+
+    <!-- GEO-FENCING NOTIFICATION POPUP -->
+    <div id="geoNotification"
+         class="alert alert-warning shadow-lg"
+         style="display:none; position:fixed; top:20px; left:20px;
+                z-index:9998; width:350px; max-width:90%;
+                border-left:6px solid #d39e00;">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">📍 Geo-Fencing Alert!</h5>
+
+            <button type="button" class="btn-close"
+                    onclick="closeGeoNotification()"></button>
+        </div>
+
+        <hr />
+
+        <p class="mb-1">
+            <strong>Tourist ID:</strong>
+            <span id="geoTouristId"></span>
+        </p>
+
+        <p class="mb-1">
+            <strong>Safety Zone:</strong>
+            <span id="geoZoneName"></span>
+        </p>
+
+        <p class="mb-1">
+            <strong>Distance:</strong>
+            <span id="geoDistance"></span> KM
+        </p>
+
+        <p class="mb-0">
+            <strong>Message:</strong>
+            <span id="geoMessage"></span>
+        </p>
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4 col-lg">
+            <div class="card text-center p-3 h-100">
+                <div class="fs-2">👥</div>
+                <h5>Total Tourists</h5>
+                <h2 class="text-primary" id="totalTourists">
+                    @Model.Tourists.Count
+                </h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+            <div class="card text-center p-3 h-100">
+                <div class="fs-2">🚨</div>
+                <h5>Emergency Reports</h5>
+                <h2 class="text-danger" id="emergencyReports">
+                    @Model.Emergencies.Count
+                </h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+            <div class="card text-center p-3 h-100">
+                <div class="fs-2">⏳</div>
+                <h5>Pending Emergencies</h5>
+                <h2 class="text-warning" id="pendingEmergencies">
+                    @Model.Emergencies.Count(e => e.Status == "Pending")
+                </h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+            <div class="card text-center p-3 h-100">
+                <div class="fs-2">📍</div>
+                <h5>Geo-Fencing Alerts</h5>
+                <h2 class="text-success" id="geofenceAlerts">
+                    @Model.GeofenceAlerts.Count
+                </h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+            <div class="card text-center p-3 h-100">
+                <div class="fs-2">🔐</div>
+                <h5>Digital Identities</h5>
+                <h2 style="color:#7045b5;" id="digitalIdentities">
+                    @Model.DigitalIdentities.Count
+                </h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- DIGITAL IDENTITY MANAGEMENT -->
+    <div class="card shadow-sm p-4 mb-4">
+
+        <h4 class="mb-3">
+            🔐 Blockchain Digital Identity Management
+        </h4>
+
+        <p class="text-secondary">
+            Verify tourist digital identities and test the SHA-256
+            tampering detection system.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3">
+
+            <a asp-controller="Home" asp-action="VerifyIdentity"
+               class="btn btn-primary">
+                🔐 Verify Digital Identity
+            </a>
+
+            <a asp-controller="Home" asp-action="TamperingTest"
+               class="btn btn-danger">
+                🔍 Tampering Detection
+            </a>
+
+            <form asp-controller="Home"
+                  asp-action="GenerateMissingIdentities"
+                  method="post">
+
+                <button type="submit" class="btn btn-success">
+                    ➕ Generate Missing Identities
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- REGISTERED TOURISTS -->
+    <h3 class="mt-4">👥 Registered Tourists</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-primary">
+                <tr>
+                    <th>Tourist ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Destination</th>
+                    <th>Travel Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Tourists.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            No registered tourists found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var tourist in Model.Tourists)
+                    {
+                        <tr>
+                            <td>@tourist.TouristId</td>
+                            <td>@tourist.Name</td>
+                            <td>@tourist.Age</td>
+                            <td>@tourist.Email</td>
+                            <td>@tourist.Phone</td>
+                            <td>@tourist.Destination</td>
+                            <td>@tourist.TravelDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <hr />
+
+
+    <!-- DIGITAL IDENTITY RECORDS -->
+    <h3 class="mt-4">
+        🔐 Blockchain Digital Identity Records
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-primary">
+                <tr>
+                    <th>Tourist ID</th>
+                    <th>Identity Hash (SHA-256)</th>
+                    <th>Previous Hash</th>
+                    <th>Created At</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.DigitalIdentities.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            No digital identities found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var identity in Model.DigitalIdentities)
+                    {
+                        <tr>
+                            <td>@identity.TouristId</td>
+
+                            <td style="max-width:300px;word-break:break-all;">
+                                @identity.IdentityHash
+                            </td>
+
+                            <td style="max-width:200px;word-break:break-all;">
+                                @identity.PreviousHash
+                            </td>
+
+                            <td>
+                                @identity.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss")
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    @identity.Status
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <hr />
+
+
+    <!-- EMERGENCY REPORTS -->
+    <h3 class="mt-4 text-danger">
+        🚨 Emergency Reports
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-danger">
+                <tr>
+                    <th>Tourist ID</th>
+                    <th>Emergency Type</th>
+                    <th>Description</th>
+                    <th>Reported At</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="emergencyTableBody">
+
+                @if (Model.Emergencies.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            No emergency reports found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var emergency in Model.Emergencies)
+                    {
+                        <tr>
+                            <td>@emergency.TouristId</td>
+                            <td>@emergency.EmergencyType</td>
+                            <td>@emergency.Description</td>
+
+                            <td>
+                                @emergency.ReportedAt.ToString("dd-MM-yyyy HH:mm:ss")
+                            </td>
+
+                            <td>
+                                @if (emergency.Status == "Resolved")
+                                {
+                                    <span class="badge bg-success">
+                                        Resolved
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (emergency.Status != "Resolved")
+                                {
+                                    <form asp-action="UpdateEmergencyStatus"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@emergency.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-success btn-sm">
+                                            Resolve
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-success">
+                                        Completed
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+
+    <!-- GEO-FENCING ALERTS -->
+    <h3 class="mt-4 text-danger">
+        📍 Geo-Fencing Alerts
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-warning">
+                <tr>
+                    <th>Tourist ID</th>
+                    <th>Safety Zone</th>
+                    <th>Distance (KM)</th>
+                    <th>Alert Message</th>
+                    <th>Created At</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="geofenceTableBody">
+
+                @if (Model.GeofenceAlerts.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            No Geo-Fencing alerts found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var alert in Model.GeofenceAlerts)
+                    {
+                        <tr>
+                            <td>@alert.TouristId</td>
+                            <td>@alert.ZoneName</td>
+                            <td>@alert.DistanceInKm.ToString("0.00")</td>
+                            <td>@alert.AlertMessage</td>
+
+                            <td>
+                                @alert.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss")
+                            </td>
+
+                            <td>
+                                @if (alert.Status == "Resolved")
+                                {
+                                    <span class="badge bg-success">
+                                        Resolved
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (alert.Status != "Resolved")
+                                {
+                                    <form asp-action="UpdateGeofenceAlertStatus"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@alert.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-success btn-sm">
+                                            Resolve
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-success">
+                                        Completed
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+
+    <!-- TOURIST LOCATION RECORDS -->
+    <h3 class="mt-4">
+        📍 Tourist Location Records
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-info">
+                <tr>
+                    <th>Tourist ID</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Recorded Date & Time</th>
+                </tr>
+            </thead>
+
+            <tbody id="locationTableBody">
+
+                @if (Model.TouristLocations.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No tourist locations recorded yet.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var location in Model.TouristLocations)
+                    {
+                        <tr>
+                            <td>@location.TouristId</td>
+                            <td>@location.Latitude</td>
+                            <td>@location.Longitude</td>
+
+                            <td>
+                                @location.RecordedAt.ToString("dd-MM-yyyy HH:mm:ss")
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+
+    <!-- LIVE LOCATION MAP -->
+    <h3 class="mt-4">
+        🗺️ Live Tourist Location Map
+    </h3>
+
+    <div class="card p-3 mb-4">
+        @await Html.PartialAsync("_TouristMap", Model.TouristLocations)
+    </div>
+
+
+    <!-- ANTIFORGERY TOKEN -->
+    <div id="antiForgeryContainer" style="display:none;">
+        @Html.AntiForgeryToken()
+    </div>
+
+</div>
+
+
+<script>
+
+    const dashboardUpdateUrl =
+        '@Url.Action("DashboardUpdates", "Home")';
+
+    const emergencyStatusUrl =
+        '@Url.Action("UpdateEmergencyStatus", "Home")';
+
+    const geofenceStatusUrl =
+        '@Url.Action("UpdateGeofenceAlertStatus", "Home")';
+
+
+    const requestToken = document.querySelector(
+        '#antiForgeryContainer input[name="__RequestVerificationToken"]'
+    )?.value;
+
+
+    // REMEMBER EXISTING RECORDS
+    const knownEmergencyIds = new Set(
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.Emergencies.Select(e => e.Id)
+        ))
+    );
+
+    const knownGeoAlertIds = new Set(
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.GeofenceAlerts.Select(a => a.Id)
+        ))
+    );
+
+
+    // SOUND SETTINGS
+    let audioContext = null;
+    let sosSoundEnabled = false;
+
+
+    document.getElementById("enableSOSSound")
+        .addEventListener("click", async function () {
+
+            const AudioContextClass =
+                window.AudioContext || window.webkitAudioContext;
+
+            if (!AudioContextClass) {
+                document.getElementById("soundStatus").textContent =
+                    "Sound is not supported by this browser.";
+                return;
+            }
+
+            try {
+                if (!audioContext) {
+                    audioContext = new AudioContextClass();
+                }
+
+                await audioContext.resume();
+
+                sosSoundEnabled = true;
+
+                document.getElementById("soundStatus").textContent =
+                    "All alert sounds enabled";
+
+                this.textContent = "🔊 Alert Sounds Enabled";
+
+                playSOSSound();
+
+            } catch (error) {
+
+                console.error("Sound could not be enabled:", error);
+
+                document.getElementById("soundStatus").textContent =
+                    "Could not enable sound.";
+            }
+        });
+
+
+    // SOS SOUND
+    function playSOSSound() {
+
+        if (!sosSoundEnabled || !audioContext) {
+            return;
+        }
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = 850;
+
+        gain.gain.value = 0.15;
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.5);
+    }
+
+
+    // GEO-FENCING SOUND
+    function playGeoFenceSound() {
+
+        if (!sosSoundEnabled || !audioContext) {
+            return;
+        }
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = 550;
+
+        gain.gain.value = 0.15;
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.8);
+    }
+
+
+    // SOS NOTIFICATION
+    function showSOSNotification(emergency) {
+
+        document.getElementById("sosTouristId").textContent =
+            emergency.touristId;
+
+        document.getElementById("sosEmergencyType").textContent =
+            emergency.emergencyType;
+
+        document.getElementById("sosDescription").textContent =
+            emergency.description;
+
+        document.getElementById("sosReportedAt").textContent =
+            emergency.reportedAt;
+
+        document.getElementById("sosNotification").style.display =
+            "block";
+
+        playSOSSound();
+    }
+
+
+    function closeSOSNotification() {
+        document.getElementById("sosNotification").style.display =
+            "none";
+    }
+
+
+    // GEO-FENCING NOTIFICATION
+    function showGeoNotification(alert) {
+
+        document.getElementById("geoTouristId").textContent =
+            alert.touristId;
+
+        document.getElementById("geoZoneName").textContent =
+            alert.zoneName;
+
+        document.getElementById("geoDistance").textContent =
+            Number(alert.distanceInKm).toFixed(2);
+
+        document.getElementById("geoMessage").textContent =
+            alert.alertMessage;
+
+        document.getElementById("geoNotification").style.display =
+            "block";
+
+        playGeoFenceSound();
+    }
+
+
+    function closeGeoNotification() {
+        document.getElementById("geoNotification").style.display =
+            "none";
+    }
+
+
+    // TABLE FUNCTIONS
+    function addCell(row, value) {
+
+        const cell = document.createElement("td");
+
+        cell.textContent = value ?? "";
+
+        row.appendChild(cell);
+
+        return cell;
+    }
+
+
+    function addStatus(row, status) {
+
+        const cell = document.createElement("td");
+        const badge = document.createElement("span");
+
+        badge.className = status === "Resolved"
+            ? "badge bg-success"
+            : "badge bg-warning text-dark";
+
+        badge.textContent = status || "Pending";
+
+        cell.appendChild(badge);
+        row.appendChild(cell);
+    }
+
+
+    function addResolveAction(row, url, id, status) {
+
+        const cell = document.createElement("td");
+
+        if (status === "Resolved") {
+
+            const completed = document.createElement("span");
+
+            completed.className = "text-success";
+            completed.textContent = "Completed";
+
+            cell.appendChild(completed);
+
+        } else {
+
+            const form = document.createElement("form");
+
+            form.method = "post";
+            form.action = url;
+
+            const idInput = document.createElement("input");
+
+            idInput.type = "hidden";
+            idInput.name = "id";
+            idInput.value = id;
+
+            form.appendChild(idInput);
+
+            const tokenInput = document.createElement("input");
+
+            tokenInput.type = "hidden";
+            tokenInput.name = "__RequestVerificationToken";
+            tokenInput.value = requestToken || "";
+
+            form.appendChild(tokenInput);
+
+            const button = document.createElement("button");
+
+            button.type = "submit";
+            button.className = "btn btn-success btn-sm";
+            button.textContent = "Resolve";
+
+            form.appendChild(button);
+
+            cell.appendChild(form);
+        }
+
+        row.appendChild(cell);
+    }
+
+
+    // UPDATE EMERGENCY TABLE
+    function updateEmergencyTable(items) {
+
+        const body = document.getElementById("emergencyTableBody");
+
+        body.replaceChildren();
+
+        if (!items || items.length === 0) {
+
+            const row = body.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 6;
+            cell.className = "text-center";
+            cell.textContent = "No emergency reports found.";
+
+            return;
+        }
+
+        items.forEach(item => {
+
+            const row = body.insertRow();
+
+            addCell(row, item.touristId);
+            addCell(row, item.emergencyType);
+            addCell(row, item.description);
+            addCell(row, item.reportedAt);
+
+            addStatus(row, item.status);
+
+            addResolveAction(
+                row,
+                emergencyStatusUrl,
+                item.id,
+                item.status
+            );
+        });
+    }
+
+
+    // UPDATE GEO-FENCING TABLE
+    function updateGeofenceTable(items) {
+
+        const body = document.getElementById("geofenceTableBody");
+
+        body.replaceChildren();
+
+        if (!items || items.length === 0) {
+
+            const row = body.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 7;
+            cell.className = "text-center";
+            cell.textContent = "No Geo-Fencing alerts found.";
+
+            return;
+        }
+
+        items.forEach(item => {
+
+            const row = body.insertRow();
+
+            addCell(row, item.touristId);
+            addCell(row, item.zoneName);
+
+            addCell(
+                row,
+                Number(item.distanceInKm).toFixed(2)
+            );
+
+            addCell(row, item.alertMessage);
+            addCell(row, item.createdAt);
+
+            addStatus(row, item.status);
+
+            addResolveAction(
+                row,
+                geofenceStatusUrl,
+                item.id,
+                item.status
+            );
+        });
+    }
+
+
+    // UPDATE LOCATION TABLE
+    function updateLocationTable(items) {
+
+        const body = document.getElementById("locationTableBody");
+
+        body.replaceChildren();
+
+        if (!items || items.length === 0) {
+
+            const row = body.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 4;
+            cell.className = "text-center";
+            cell.textContent = "No tourist locations recorded yet.";
+
+            return;
+        }
+
+        items.forEach(item => {
+
+            const row = body.insertRow();
+
+            addCell(row, item.touristId);
+            addCell(row, item.latitude);
+            addCell(row, item.longitude);
+            addCell(row, item.recordedAt);
+        });
+    }
+
+
+    // DASHBOARD AUTO UPDATE
+    async function refreshDashboard() {
+
+        const status =
+            document.getElementById("dashboardStatus");
+
+        try {
+
+            const response = await fetch(
+                dashboardUpdateUrl + "?time=" + Date.now(),
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Dashboard update request failed.");
+            }
+
+            const data = await response.json();
+
+
+            // DETECT NEW SOS REPORTS
+            if (data.latestEmergencies) {
+
+                data.latestEmergencies.forEach(emergency => {
+
+                    const emergencyId = Number(emergency.id);
+
+                    if (!knownEmergencyIds.has(emergencyId)) {
+
+                        knownEmergencyIds.add(emergencyId);
+
+                        showSOSNotification(emergency);
+                    }
+                });
+            }
+
+
+            // DETECT NEW GEO-FENCING ALERTS
+            if (data.latestAlerts) {
+
+                data.latestAlerts.forEach(alert => {
+
+                    const alertId = Number(alert.id);
+
+                    if (!knownGeoAlertIds.has(alertId)) {
+
+                        knownGeoAlertIds.add(alertId);
+
+                        showGeoNotification(alert);
+                    }
+                });
+            }
+
+
+            // UPDATE SUMMARY CARDS
+            document.getElementById("totalTourists").textContent =
+                data.totalTourists;
+
+            document.getElementById("emergencyReports").textContent =
+                data.emergencyReports;
+
+            document.getElementById("pendingEmergencies").textContent =
+                data.pendingEmergencies;
+
+            document.getElementById("geofenceAlerts").textContent =
+                data.geofenceAlerts;
+
+            document.getElementById("digitalIdentities").textContent =
+                data.digitalIdentities;
+
+
+            // UPDATE TABLES
+            updateEmergencyTable(data.latestEmergencies);
+
+            updateGeofenceTable(data.latestAlerts);
+
+            updateLocationTable(data.latestLocations);
+
+
+            status.className = "badge bg-success";
+
+            status.textContent = "● Auto Updates Enabled";
+
+            document.getElementById("lastUpdated").textContent =
+                "Last updated: " + new Date().toLocaleTimeString();
+
+        } catch (error) {
+
+            status.className = "badge bg-danger";
+
+            status.textContent = "● Update Failed";
+
+            document.getElementById("lastUpdated").textContent =
+                "Could not refresh dashboard. Retrying...";
+
+            console.error("Dashboard update error:", error);
+        }
+    }
+
+
+    // FIRST UPDATE
+    refreshDashboard();
+
+
+    // REFRESH EVERY 5 SECONDS
+    setInterval(refreshDashboard, 5000);
+
+</script>

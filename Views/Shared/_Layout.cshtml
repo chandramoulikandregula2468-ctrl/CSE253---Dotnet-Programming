@@ -1,0 +1,135 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Smart Tourist Safety</title>
+
+    <script type="importmap"></script>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TouristSafetySystem.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow mb-4"
+             style="background-color: #17365f;">
+
+            <div class="container-fluid px-4">
+
+                <a class="navbar-brand fw-bold"
+                   asp-controller="Home"
+                   asp-action="Index">
+                    🛡 Smart Tourist Safety
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <ul class="navbar-nav ms-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                🏠 Home
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Register">
+                                📝 Register Tourist
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Dashboard">
+                                📊 Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="SOS">
+                                🚨 Emergency SOS
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="TrackLocation">
+                                📍 Location Tracking
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="GeoFence">
+                                🛡 Geo-Fencing
+                            </a>
+                        </li>
+
+                        <!-- Digital Identity Verification -->
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="VerifyIdentity">
+                                🔐 Verify Digital Identity
+                            </a>
+                        </li>
+
+                        <!-- Tampering Detection -->
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="TamperingTest">
+                                🔍 Tampering Detection
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top text-muted py-3 mt-4">
+        <div class="container text-center">
+            &copy; 2026 - Smart Tourist Safety Monitoring System
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

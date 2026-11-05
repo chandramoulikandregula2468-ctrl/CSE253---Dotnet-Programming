@@ -1,0 +1,254 @@
+
+@model List<TouristSafetySystem.Models.TouristLocation>
+@using System.Text.Json
+@using System.Linq
+
+@{
+    var locations = Model ?? new List<TouristSafetySystem.Models.TouristLocation>();
+}
+
+<div class="tourist-map-section mt-4 mb-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+        <div>
+            <h3 class="text-primary mb-1">Live Tourist Location Map</h3>
+            <p class="text-muted mb-0">
+                Monitor tourist locations in real time.
+            </p>
+        </div>
+
+        <div class="map-location-count">
+            📍 <strong id="mapLocationCount">@locations.Count</strong>
+            <span>Location Records</span>
+        </div>
+    </div>
+
+    <div class="map-card">
+        <div id="touristMap"></div>
+    </div>
+
+    <div class="map-footer mt-3">
+        <span>🔵 Blue marker: Previous location</span>
+        <span>🟢 Green marker: Latest location</span>
+        <span id="mapUpdateStatus">Updating map...</span>
+    </div>
+
+</div>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+    .tourist-map-section {
+        background: #ffffff;
+        padding: 22px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    }
+
+    .map-location-count {
+        background: #eaf2ff;
+        color: #2456a6;
+        padding: 10px 16px;
+        border-radius: 10px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .map-card {
+        border: 1px solid #dce3ec;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    #touristMap {
+        height: 480px;
+        width: 100%;
+        background: #e9eef5;
+    }
+
+    .map-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        color: #555;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 600px) {
+        .tourist-map-section {
+            padding: 12px;
+        }
+
+        #touristMap {
+            height: 350px;
+        }
+    }
+</style>
+
+<script>
+    // Dashboard data endpoint
+    const mapUpdateUrl = '@Url.Action("DashboardUpdates", "Home")';
+
+    // Create map
+    const map = L.map('touristMap').setView(
+        [20.5937, 78.9629], 5
+    );
+
+    // OpenStreetMap layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Marker layer
+    const markerLayer = L.featureGroup().addTo(map);
+
+    let firstMapLoad = true;
+    let mapUpdating = false;
+
+    // Update markers using latest server data
+    async function refreshTouristMap() {
+
+        if (mapUpdating) return;
+
+        mapUpdating = true;
+
+        const status = document.getElementById("mapUpdateStatus");
+
+        try {
+            const response = await fetch(
+                mapUpdateUrl + "?time=" + Date.now(),
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Could not load locations.");
+            }
+
+            const data = await response.json();
+
+            const locations = data.latestLocations || [];
+
+            // Remove old markers
+            markerLayer.clearLayers();
+
+            // Track tourists whose latest marker is already displayed
+            const latestTourists = new Set();
+
+            let validCount = 0;
+
+            // Server returns locations newest first
+            locations.forEach(function (location) {
+
+                const lat = Number(location.latitude);
+                const lng = Number(location.longitude);
+
+                if (!Number.isFinite(lat) ||
+                    !Number.isFinite(lng) ||
+                    lat < -90 || lat > 90 ||
+                    lng < -180 || lng > 180) {
+                    return;
+                }
+
+                const isLatest =
+                    !latestTourists.has(location.touristId);
+
+                latestTourists.add(location.touristId);
+
+                const color = isLatest ? "green" : "blue";
+
+                const marker = L.circleMarker([lat, lng], {
+                    radius: isLatest ? 10 : 7,
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.85,
+                    weight: 2
+                });
+
+                // Safe popup content
+                const popup = document.createElement("div");
+
+                const tourist = document.createElement("strong");
+                tourist.textContent =
+                    "Tourist ID: " + location.touristId;
+
+                const time = document.createElement("div");
+                time.textContent =
+                    "Recorded At: " + location.recordedAt;
+
+                const label = document.createElement("div");
+                label.textContent = isLatest
+                    ? "Latest recorded location"
+                    : "Previous recorded location";
+
+                popup.appendChild(tourist);
+                popup.appendChild(time);
+                popup.appendChild(label);
+
+                marker.bindPopup(popup);
+
+                marker.addTo(markerLayer);
+
+                validCount++;
+            });
+
+            // Update record count
+            document.getElementById("mapLocationCount")
+                .textContent = validCount;
+
+            // Zoom to locations on first load or when markers exist
+            if (validCount > 0 && firstMapLoad) {
+
+                map.fitBounds(markerLayer.getBounds(), {
+                    padding: [40, 40],
+                    maxZoom: 15
+                });
+
+                firstMapLoad = false;
+            }
+
+            // Default map if there are no locations
+            if (validCount === 0 && firstMapLoad) {
+                map.setView([20.5937, 78.9629], 5);
+                firstMapLoad = false;
+            }
+
+            status.textContent =
+                "● Map updated: " +
+                new Date().toLocaleTimeString();
+
+            status.style.color = "green";
+
+        } catch (error) {
+
+            status.textContent = "● Map update failed. Retrying...";
+            status.style.color = "red";
+
+            console.error("Map update error:", error);
+
+        } finally {
+            mapUpdating = false;
+        }
+    }
+
+    // Initial update
+    refreshTouristMap();
+
+    // Refresh every five seconds
+    setInterval(refreshTouristMap, 5000);
+
+    // Fix map display after page rendering
+    setTimeout(function () {
+        map.invalidateSize();
+    }, 500);
+</script>

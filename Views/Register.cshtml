@@ -1,0 +1,48 @@
+
+@model TouristSafetySystem.Models.Tourist
+
+@{
+    ViewData["Title"] = "Tourist Registration";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">
+        Tourist Registration
+    </h2>
+
+    <div class="card shadow p-4 mx-auto" style="max-width:600px;">
+
+        <form asp-controller="Home" asp-action="Register" method="post">
+
+            <label class="form-label">Full Name</label>
+            <input asp-for="Name" class="form-control mb-3"
+                   placeholder="Enter your name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <label class="form-label">Age</label>
+            <input asp-for="Age" type="number" class="form-control mb-3"
+                   placeholder="Enter your age" />
+
+            <label class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control mb-3"
+                   placeholder="Enter your email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+            <label class="form-label">Phone Number</label>
+            <input asp-for="Phone" class="form-control mb-3"
+                   placeholder="Enter your phone number" />
+
+            <label class="form-label">Destination</label>
+            <input asp-for="Destination" class="form-control mb-3"
+                   placeholder="Enter destination" />
+
+            <label class="form-label">Travel Date</label>
+            <input asp-for="TravelDate" type="date" class="form-control mb-4" />
+
+            <button type="submit" class="btn btn-primary w-100">
+                Register Tourist
+            </button>
+
+        </form>
+    </div>
+</div>

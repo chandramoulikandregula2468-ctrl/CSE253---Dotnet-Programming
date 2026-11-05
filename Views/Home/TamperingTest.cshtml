@@ -1,0 +1,82 @@
+
+@{
+    ViewData["Title"] = "Tampering Detection";
+}
+
+<div class="container mt-4">
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-3">
+            🔐 Blockchain Tampering Detection
+        </h2>
+
+        <p class="text-center text-muted">
+            Simulate a change to tourist identity data and check
+            whether the SHA-256 hash detects it.
+        </p>
+
+        <form asp-controller="Home"
+              asp-action="TamperingTest"
+              method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Tourist ID</label>
+                <input type="text"
+                       name="touristId"
+                       class="form-control"
+                       placeholder="Example: T1FF6E380"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Modified Name</label>
+                <input type="text"
+                       name="modifiedName"
+                       class="form-control"
+                       placeholder="Enter a changed name"
+                       required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Test Tampering
+            </button>
+
+        </form>
+
+        @if (ViewBag.Message != null)
+        {
+            <hr />
+
+            <h4>Test Result</h4>
+
+            <div class="alert @(ViewBag.TamperingStatus == "Tampering Detected"
+                ? "alert-danger" : "alert-success")">
+                <strong>@ViewBag.Message</strong>
+            </div>
+
+            @if (ViewBag.Tourist != null)
+            {
+                <p><strong>Original Name:</strong> @ViewBag.Tourist.Name</p>
+                <p><strong>Modified Name:</strong> @ViewBag.ModifiedName</p>
+                <p><strong>Tourist ID:</strong> @ViewBag.Tourist.TouristId</p>
+                <p><strong>Detection Status:</strong> @ViewBag.TamperingStatus</p>
+
+                <p><strong>Stored SHA-256 Hash:</strong></p>
+                <div class="text-break small mb-3">
+                    @ViewBag.Identity.IdentityHash
+                </div>
+
+                <p><strong>Simulated SHA-256 Hash:</strong></p>
+                <div class="text-break small mb-3">
+                    @ViewBag.SimulatedHash
+                </div>
+            }
+        }
+
+        <div class="alert alert-info mt-3">
+            This is a simulation. Your original tourist information
+            and stored digital identity remain unchanged.
+        </div>
+
+    </div>
+</div>
